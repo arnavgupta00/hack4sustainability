@@ -76,6 +76,7 @@ const SpeechRecognitionComponent = () => {
 
     }
     const fetchData = async () => {
+        setResult(result)
         try {
             console.log(`/english/${leftInputText}/${transcript}`);
             const response = await fetch(url + `/english/${leftInputText}/${transcript}`, {
