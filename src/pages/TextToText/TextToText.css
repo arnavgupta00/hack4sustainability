@@ -102,3 +102,64 @@
     height: max-content;
 
 }
+
+@media (min-width:200px) and (max-width: 600px) {
+    .textTTT {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 15px;
+        font-family: 'Syne', sans-serif;
+        font-weight: bolder;
+    }
+    .formRight {
+        display: flex;
+        flex-direction: row;
+        width: 90vw;
+        padding: 50px;
+        justify-content: center;
+        align-items: center;
+    
+    }
+    
+    .formLeft {
+        display: flex;
+        flex-direction: column;
+        width: 90vw;
+        padding: 50px;
+        justify-content: center;
+        align-items: center;
+    
+    
+    }
+    .mainSTS {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 150px;
+        font-family: 'Syne', sans-serif;
+    
+    }
+    .mainSTSright {
+        height: max-content;
+        width: 80vw;
+        background-color: rgb(198, 198, 198);
+        border-radius: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding-bottom: 50px;
+        padding-left: 50px;
+    }
+    .submitRight {
+        height: 5vh;
+        width: 50px;
+        background-color: rgb(19, 222, 83);
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+}
