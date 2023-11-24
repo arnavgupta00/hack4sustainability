@@ -54,6 +54,7 @@ const TextToText = () => {
         if (response.ok) {
             const res = await response.json();
             setResult(res.convertedText);
+            console.log(res.convertedText)
         } else {
             console.error("Failed to make request:", response.statusText);
             setResult(response.statusText);
