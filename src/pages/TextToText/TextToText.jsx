@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/navbar/navbar';
 import { Link, useNavigate } from 'react-router-dom';
-import "dotenv/config";
 import './TextToText.css';
 
 
