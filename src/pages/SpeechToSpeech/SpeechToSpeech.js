@@ -137,7 +137,7 @@ const SpeechRecognitionComponent = () => {
             <input
                 type='text'
                 className=''
-                placeholder='Input Text'
+                placeholder='Output Text'
                 value={leftInputText}
                 onChange={handleLeftTextInputChange}
             />
