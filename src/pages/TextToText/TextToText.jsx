@@ -13,7 +13,7 @@ const TextToText = () => {
   
   const navigate = useNavigate();
 
-  const url = "http://localhost:5000";
+  const url = "https://phonotalk.vercel.app";
 
   const handleLeftInputChange = (e) => {
     setLeftInputLanguage(e.target.value);
