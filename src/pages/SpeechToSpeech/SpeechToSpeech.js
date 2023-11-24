@@ -8,7 +8,7 @@ const SpeechRecognitionComponent = () => {
     const [permissionGranted, setPermissionGranted] = useState(false);
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
-    const url = "http://localhost:5000";
+    const url = "https://phonotalk.vercel.app";
 
     const handleLeftTextInputChange = (e) => {
         setLeftInputText(e.target.value);
