@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from "../../components/navbar/navbar.jsx";
-import "dotenv/config";
 const SpeechRecognitionComponent = () => {
     const [transcript, setTranscript] = useState('');
     const [listening, setListening] = useState(false);
