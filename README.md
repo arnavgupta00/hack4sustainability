@@ -1,6 +1,11 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Visit website on [phonoTalk](https://phonotalksolutions.vercel.app/).
+
+## Preview
+
+![image](https://github.com/arnavgupta00/hack4sustainability/assets/101815033/f8455356-6814-4c4a-a1b5-65a36144744c)
+
 
 ## Available Scripts
 
