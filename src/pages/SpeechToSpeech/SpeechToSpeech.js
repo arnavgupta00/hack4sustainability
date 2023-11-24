@@ -1,21 +1,82 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Navbar from "../../components/navbar/navbar.jsx";
+import { Link, useNavigate } from 'react-router-dom';
+
 const SpeechRecognitionComponent = () => {
-    const [transcript, setTranscript] = useState('');
+    const [transcript, setTranscript] = useState('Spoken text will be shown here');
     const [listening, setListening] = useState(false);
     const [leftInputText, setLeftInputText] = useState('');
+    const navigate = useNavigate();
 
     const [permissionGranted, setPermissionGranted] = useState(false);
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    const recognition = useRef(null);
+    const [result, setResult] = useState('Generated Text will be shown here!!');
 
+    const [leftInputLanguage, setLeftInputLanguage] = useState('');
+    const [rightInputLanguage, setRightInputLanguage] = useState('');
     const url = "https://phonotalk.vercel.app";
 
     const handleLeftTextInputChange = (e) => {
         setLeftInputText(e.target.value);
     };
+    function mapLanguageNameToBCP47(languageName) {
+        const languageMap = {
+            arabic: 'ar-SA',
+            czech: 'cs-CZ',
+            danish: 'da-DK',
+            german: 'de-DE',
+            greek: 'el-GR',
+            english: 'en-US', 
+            spanish: 'es-ES',
+            finnish: 'fi-FI',
+            french: 'fr-FR',
+            hebrew: 'he-IL',
+            hindi: 'hi-IN',
+            hungarian: 'hu-HU',
+            indonesian: 'id-ID',
+            italian: 'it-IT',
+            japanese: 'ja-JP',
+            korean: 'ko-KR',
+            dutch: 'nl-NL',
+            norwegian: 'no-NO',
+            polish: 'pl-PL',
+            portuguese: 'pt-PT',
+            romanian: 'ro-RO',
+            russian: 'ru-RU',
+            slovak: 'sk-SK',
+            swedish: 'sv-SE',
+            thai: 'th-TH',
+            turkish: 'tr-TR',
+            chinese: 'zh-CN',
+            // Add more mappings as needed
+        };
+
+        const normalizedLanguageName = languageName.toLowerCase();
+        return languageMap[normalizedLanguageName] || 'en-US';
+    }
+    const textToSpeech = (text, language) => {
+        const languageTag = mapLanguageNameToBCP47(language);
+
+        if ('speechSynthesis' in window) {
+            const synth = window.speechSynthesis;
+
+            const voices = synth.getVoices();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            utterance.voice = voices.find(voice => voice.lang === languageTag); 
+
+            utterance.pitch = 1;
+            utterance.rate = 1;
+
+            synth.speak(utterance);
+        } else {
+            console.error('Speech synthesis is not supported in this browser.');
+        }
+
+    }
     const fetchData = async () => {
         try {
-
             console.log(`/english/${leftInputText}/${transcript}`);
             const response = await fetch(url + `/english/${leftInputText}/${transcript}`, {
                 method: 'POST',
@@ -26,7 +87,8 @@ const SpeechRecognitionComponent = () => {
 
             if (response.ok) {
                 const res = await response.json();
-                setTranscript(res.convertedText);
+                setResult(res.convertedText);
+                textToSpeech(res.convertedText, leftInputText)
             } else {
                 console.error("Failed to make request:", response.statusText);
                 setTranscript(response.statusText);
@@ -36,17 +98,19 @@ const SpeechRecognitionComponent = () => {
             setTranscript(error)
         }
     };
-    useEffect(() => {
-        recognition.lang = 'en-US';
-        recognition.interimResults = true;
-        recognition.continuous = true;
 
-        recognition.onstart = () => {
+    const initRecognition = () => {
+        const recognitionInstance = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognitionInstance.lang = 'en-US';
+        recognitionInstance.interimResults = true;
+        recognitionInstance.continuous = true;
+
+        recognitionInstance.onstart = () => {
             setListening(true);
             console.log('Speech recognition started');
         };
-        
-        recognition.onresult = (event) => {
+
+        recognitionInstance.onresult = (event) => {
             let interimTranscript = '';
             for (let i = event.resultIndex; i < event.results.length; i++) {
                 const transcript = event.results[i][0].transcript;
@@ -59,46 +123,40 @@ const SpeechRecognitionComponent = () => {
             console.log('Interim Transcript:', interimTranscript);
         };
 
-        recognition.onerror = (event) => {
+        recognitionInstance.onerror = (event) => {
             console.error('Speech recognition error:', event.error);
             setListening(false);
         };
 
-        recognition.onend = () => {
+        recognitionInstance.onend = () => {
+
             console.log('Speech recognition ended');
             setListening(false);
-
-            const fetchData = async () => {
-                try {
-
-                    console.log(`/english/${leftInputText}/${transcript}`);
-                    const response = await fetch(url + `/english/${leftInputText}/${transcript}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-
-                    if (response.ok) {
-                        const res = await response.json();
-                        setTranscript(res.convertedText);
-                    } else {
-                        console.error("Failed to make request:", response.statusText);
-                        setTranscript(response.statusText);
-                    }
-                } catch (error) {
-                    console.error("Failed to make request:", error);
-                    setTranscript(error)
-                }
-            };
-            fetchData();
         };
 
-        // Request permission to use the microphone
+        recognition.current = recognitionInstance;
+    };
+    const handleRightInputChange = (e) => {
+        setRightInputLanguage(e.target.value);
+    };
+
+    const handleSubmitLeft = (e) => {
+        e.preventDefault();
+        console.log('Left Input Language:', leftInputLanguage);
+        console.log('Left Input Text:', leftInputText);
+    };
+
+    const handleSubmitRight = (e) => {
+        e.preventDefault();
+        console.log('Right Input Language:', rightInputLanguage);
+    };
+
+    useEffect(() => {
         navigator.mediaDevices
             .getUserMedia({ audio: true })
             .then(() => {
                 setPermissionGranted(true);
+                initRecognition();
             })
             .catch((error) => {
                 console.error('Error accessing microphone:', error);
@@ -106,42 +164,61 @@ const SpeechRecognitionComponent = () => {
             });
 
         return () => {
-            recognition.stop();
+            if (recognition.current) {
+                recognition.current.stop()
+            }
         };
-    }, []); // Empty dependency array means this useEffect runs once on component mount
+    }, []);
+
+    const startRecognition = () => {
+        if (permissionGranted && !listening) {
+            recognition.current.start();
+        }
+    };
 
     const toggleRecognition = () => {
-        if (permissionGranted) {
-            if (listening) {
-                console.log(`/english/${leftInputText}/${transcript}`)
-                recognition.stop();
-                setListening(false)
-                console.log(`/english/${leftInputText}/${transcript}`)
-                fetchData();
-            } else {
-                console.log(`started`)
-                recognition.start();
-                
-            }
+        if (listening) {
+
+            recognition.current.stop();
+            console.log("Calling script" + transcript);
+            fetchData();
+
         } else {
-            console.error('Microphone permission not granted');
-            // You may want to provide feedback to the user or redirect them to a settings page
+            startRecognition();
         }
     };
 
     return (
-        <div>
-            <button onClick={toggleRecognition}>
-                {listening ? 'Stop Listening' : 'Start Listening'}
-            </button>
+        <div className='mainSTS'>
+            
+            
+            
+            <form className='formLeft' onSubmit={handleSubmitLeft}>
             <input
                 type='text'
-                className=''
-                placeholder='Output Text'
+                className='inputBox lang'
+                placeholder='Output language'
                 value={leftInputText}
                 onChange={handleLeftTextInputChange}
             />
-            <p>Transcript: {transcript}</p>
+                <div className='genratedText' style={{marginTop:"50px"}}>
+                    <h1> {transcript}</h1>
+                </div>
+                <button type='submit' className='submitLeft' style={{marginTop:"50px"}} onClick={toggleRecognition}>
+                    {(listening) ? "Stop": "Listen"}
+                </button>
+            </form>
+            <div className='mainSTSright'>
+                <form className='formRight' onSubmit={handleSubmitRight}>
+
+                    <button type='submit' className='submitRight' onClick={() => textToSpeech(result, leftInputText)} >
+                        Speak
+                    </button>
+                </form>
+                <div className='genratedText'>
+                    <h1> {result}</h1>
+                </div>
+            </div>
         </div>
     );
 };
