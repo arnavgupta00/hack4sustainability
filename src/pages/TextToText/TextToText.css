@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@100&family=Oswald:wght@700&family=Poppins:wght@700&family=Roboto&family=Satisfy&family=Syne:wght@500&family=Tektur:wght@400;800&display=swap');
+
+.textTTT {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 70px;
+    font-family: 'Syne', sans-serif;
+    font-weight: bolder;
+}
+
+.mainSTS {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 150px;
+    font-family: 'Syne', sans-serif;
+
+}
+
+.mainSTSright {
+    height: max-content;
+    width: 45vw;
+    background-color: rgb(198, 198, 198);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-bottom: 50px;
+}
+
+.formRight {
+    display: flex;
+    flex-direction: row;
+    width: 45vw;
+    padding: 50px;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.formLeft {
+    display: flex;
+    flex-direction: column;
+    width: 45vw;
+    padding: 50px;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+.inputBox {
+    border-radius: 10px;
+    padding-bottom: 10vw;
+    margin-bottom: 15px;
+    padding: 15px;
+    width: 30vw;
+    border-color: transparent;
+}
+
+.text {
+    padding-bottom: 150px;
+}
+
+.submitLeft {
+    height: 5vh;
+    width: 150px;
+    background-color: rgb(19, 222, 83);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+
+}
+
+.formRight {
+    display: flex;
+    flex-direction: column;
+    width: 45vw;
+    padding: 50px;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+.submitRight {
+    height: 5vh;
+    width: 150px;
+    background-color: rgb(19, 222, 83);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.genratedText {
+    height: max-content;
+
+}

@@ -1,0 +1,22 @@
+.buttonHomeMain{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 300px;
+}
+.homeButton{
+    width: 200px;
+    height: 90px;
+    border-radius: 50px;
+    background-color: rgb(91, 172, 226);
+    margin-right: 40px;
+    font-size: 20px;
+}
+.textHomeLanding {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 70px;
+    font-family: 'Syne', sans-serif;
+    font-weight: bolder;
+    margin-top: 100px;
+}
